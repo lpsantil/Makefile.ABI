@@ -25,7 +25,7 @@ OCP_INSTALL_URL ?= $(OCP_INSTALL_URL_PREFIX)/$(OCP_INSTALL_TAR)
 OCP_INSTALL_BIN ?= $(BIN)/openshift-install
 
 BASEDOMAIN ?= example.com
-CLUSTER_ID ?= aai
+CLUSTER_ID ?= abi
 PROJECT ?= $(CLUSTER_ID).$(BASEDOMAIN)
 PDIR ?= $(PROJECT)/
 API_VIP ?= 192.168.1.10
@@ -40,7 +40,7 @@ SSH_PUB_FILE_TEXT = $(file < $(SSH_PUB_FILE))
 CNI ?= OVNKubernetes
 
 DIRS = $(BIN)
-DIRS += $(PROJECT)
+DIRS += $(PDIR)
 
 RH_SSO_URL ?= https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
 OCM_URL ?= https://api.openshift.com/api/accounts_mgmt/v1/access_token
@@ -53,25 +53,25 @@ OFFLINE_ACCESS_TOKEN := $(file < $(OFFLINE_ACCESS_TOKEN_FILE))
 BEARER := $(file < bearer_token)
 # ssh-keygen -f sno-key-ecdsa -t ed25519 -N ''
 SECRET_FILE ?= pull-secret.txt
-SECRET = $(file < $(SECRET_FILE))
+SECRET := $(file < $(SECRET_FILE))
 CURL ?= /usr/bin/curl
 JQ ?= /usr/bin/jq
 
 #$ sudo dnf install /usr/bin/nmstatectl -y
-#$ mkdir ~/aai
+#$ mkdir ~/abi
 #$ cat << EOF > ./my-cluster/install-config.yaml
 #$ cat > agent-config.yaml << EOF
-#$ openshift-install --dir aai agent create image
+#$ openshift-install --dir abi agent create image
 ## insert/boot/virtual drive agent.x86_64.iso
-#$ openshift-install --dir aai agent wait-for bootstrap-complete --log-level=info
+#$ openshift-install --dir abi agent wait-for bootstrap-complete --log-level=info
 #$ openshift-install --dir <install_directory> agent wait-for install-complete
 
 ######################################################################
 ######################## DO NOT MODIFY BELOW #########################
 ######################################################################
 
-.PHONY: all secret test runtest clean install uninstall showconfig gstat
-.PHONY: gpush tarball
+.PHONY: all secret clean install showconfig gstat
+.PHONY: gpush
 .PHONY: sno
 
 .EXPORT_ALL_VARIABLES:
@@ -130,7 +130,7 @@ $(OFFLINE_ACCESS_TOKEN_FILE):
 	@echo '**********************************************'
 	@echo Please grab your token at
 	@echo https://cloud.redhat.com/openshift/token and
-	@echo save as offline_token.txt
+	@echo save $(OFFLINE_ACCESS_TOKEN_FILE)
 	@echo '**********************************************'
 
 bearer_token: $(OFFLINE_ACCESS_TOKEN_FILE)
