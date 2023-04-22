@@ -1,0 +1,28 @@
+apiVersion: v1
+baseDomain: $BASEDOMAIN
+compute:
+- architecture: amd64
+  hyperthreading: Enabled
+  name: worker
+  replicas: 0
+controlPlane:
+  architecture: amd64
+  hyperthreading: Enabled
+  name: master
+  replicas: 1
+metadata:
+  name: $CLUSTER_ID
+networking:
+  clusterNetwork:
+  - cidr: $CLUSTER_CIDR
+    hostPrefix: $CLUSTER_HOSTPREFIX
+  machineNetwork:
+  - cidr: $MACHINE_CIDR
+  networkType: $CNI 
+  serviceNetwork:
+  - $SERVICE_CIDR
+platform:
+  none: {}
+pullSecret: '$SECRET_FILE'
+sshKey: |
+  $SSH_PUB_FILE 
