@@ -1,0 +1,7 @@
+offline_token.txt
+*-ecdsa.pub
+*-ecdsa
+agent-config.yaml
+install-config.yaml
+pull-secret.txt*
+bearer_token*
